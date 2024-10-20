@@ -3,7 +3,7 @@ import { environment } from "../utils/environment.js";
 
 const expressSessionOptions = {
   cookie: { httpOnly: true, maxAge: environment.JWT_EXPIRES_IN },
-  secret: environment.ENCRYPTION_SECRET_KEY,
+  secret: environment.JWT_SECRET_KEY,
   resave: false,
   saveUninitialized: false,
   name: "OAuth-session",

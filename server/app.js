@@ -1,70 +1,80 @@
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
-import HandleGlobalError from "./lib/HandleGlobalError.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import fixedRouter from "./routes/fixedRoutes.js";
+import moviesRouter from "./routes/moviesRoutes.js";
 import protectUserRoutes from "./middlewares/protectUserRoutes.js";
 import globalMiddlewares from "./middlewares/globalMiddlwares.js";
 import socketConnect from "./lib/socketConnect.js";
 import socketAuthMiddleware from "./middlewares/socketAuthMiddleware.js";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import typeDefs from "./graphql/typeDefs.js";
+import resolvers from "./graphql/resolvers.js";
+import cors from "cors";
+import newConnection from "./socket/newConnection.js";
+import joinRooms from "./socket/joinRooms.js";
+import onDisconnect from "./socket/onDisconnect.js";
+import unIdentifiedUrlError from "./controllers/error/unIdentifiedUrlError.js";
 
 const { app, httpServer, io } = socketConnect();
 
-app.get("/", (req, res) => {
-  res.send("Hello from the server");
-});
-
-app.get("/health", (req, res) => {
-  res.send("Server health is fine and good");
-});
-
-// NOTE: SOCKET CONNECTION
-io.use(socketAuthMiddleware);
-
-io.on("connection", (socket) => {
-  socket.on("isConnected", (arg, callback) => {
-    console.log(arg);
-    callback("Yeah, is connected");
-  });
-
-  console.log(`User connected: ${socket.id}`);
-
-  socket.on("keepAlive", (data) => {
-    console.log("Keep-alive ping received:", data);
-  });
-
-  socket.on("joinRooms", (roomIds) => {
-    if (!roomIds || roomIds.length === 0) return;
-    roomIds.map((roomId) => {
-      console.log("room joined", roomId);
-      socket.join(roomId);
+const init = async () => {
+  try {
+    app.get("/", (req, res) => {
+      res.send("Hello from the server");
     });
-  });
 
-  socket.on("disconnect", (reason) => {
-    console.log(`User disconnected: ${socket.id}, Reason: ${reason}`);
-  });
-});
+    app.get("/health", (req, res) => {
+      res.send("Server health is fine and good");
+    });
 
-// MARK: GLOBAL MIDDLEWARES
-globalMiddlewares(app);
+    // NOTE: SOCKET CONNECTION
+    io.use(socketAuthMiddleware);
+    io.on("connection", (socket) => {
+      console.log(`User connected: ${socket.id}`);
+      newConnection(socket);
+      joinRooms(socket);
+      onDisconnect(socket);
+    });
 
-// NOTE: DIFFERENT ROUTES
-app.use("/auth", authRouter);
-app.use("/user", protectUserRoutes, userRouter);
+    // MARK: GLOBAL MIDDLEWARES
+    globalMiddlewares(app);
 
-// NOTE: UNIDENTIFIED ROUTES
-app.all("*", (req, res, next) => {
-  return next(
-    new HandleGlobalError(
-      `Somethings went wrong. Please check your Url - ${req.originalUrl}`,
-      500,
-      "Fail"
-    )
-  );
-});
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+    });
 
-//  NOTE: GLOBAL ERROR HANDLER
-app.use(globalErrorHandler);
+    await server.start();
+
+    app.use(
+      "/graphql",
+      cors(),
+      expressMiddleware(server, {
+        context: ({ req }) => {
+          return { req };
+        },
+      })
+    );
+
+    // NOTE: DIFFERENT ROUTES
+    app.use("/auth", authRouter);
+    app.use("/user", protectUserRoutes, userRouter);
+    app.use("/fixed", fixedRouter);
+    app.use("/movies", moviesRouter);
+
+    // NOTE: UNIDENTIFIED ROUTES
+    app.all("*", unIdentifiedUrlError);
+
+    //  NOTE: GLOBAL ERROR HANDLER
+    app.use(globalErrorHandler);
+  } catch (error) {
+    console.log("Issue in server started", error);
+  }
+};
+
+init();
 
 export { app };
 

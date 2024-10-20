@@ -1,0 +1,5 @@
+type Query {
+  getNowPlaying: [Movie]
+  getMovie(id: ID!): Movie
+  getFixed: Fixed
+}

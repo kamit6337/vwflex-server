@@ -1,0 +1,5 @@
+type Fixed {
+  imageDetail: ImageDetail
+  genres: [Genre]
+  countries: [Country]
+}

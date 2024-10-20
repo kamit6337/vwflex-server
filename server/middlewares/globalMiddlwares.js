@@ -10,7 +10,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import passport from "passport";
 
 const globalMiddlewares = (app) => {
-  app.use(helmet());
+  // app.use(helmet());
 
   app.use(cors(corsOptions));
 

@@ -7,6 +7,7 @@ export const environment = {
   CLIENT_URL: process.env.CLIENT_URL,
   MONGO_DB_URI: process.env.MONGO_DB_URI,
   JWT_EXPIRES_IN: Number(process.env.JWT_EXPIRES_IN) || 2592000000, // 30 days
+  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
   ENCRYPTION_SECRET_KEY: process.env.ENCRYPTION_SECRET_KEY,
   ENCRYPTION_SECRET_IV: process.env.ENCRYPTION_SECRET_IV,
   GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
@@ -18,4 +19,5 @@ export const environment = {
   AWS_S3_REGION: process.env.AWS_S3_REGION,
   AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
   REDIS_URL: process.env.REDIS_URL,
+  TMDB_ACCESS_TOKEN: process.env.TMDB_ACCESS_TOKEN,
 };

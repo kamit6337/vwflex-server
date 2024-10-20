@@ -1,0 +1,6 @@
+type Production_Companies {
+  id: ID
+  logo_path: String
+  name: String
+  origin_country: String
+}

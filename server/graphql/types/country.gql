@@ -1,0 +1,6 @@
+type Country {
+  iso_3166_1: String!
+  english_name: String
+  native_name: String
+  name: String
+}
