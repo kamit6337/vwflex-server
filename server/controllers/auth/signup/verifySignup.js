@@ -4,29 +4,12 @@ import { encrypt } from "../../../utils/encryption/encryptAndDecrypt.js";
 import HandleGlobalError from "../../../lib/HandleGlobalError.js";
 import { getUserOtpFromRedis } from "../../../redis/Auth/otp.js";
 import { getNewUserByRedis } from "../../../redis/Auth/auth.js";
+import verifyOtp from "../../../functions/verifyOtp.js";
 
 const verifySignup = catchAsyncError(async (req, res, next) => {
-  const { otp: userOtp, email } = req.body;
+  const { otp, email } = req.body;
 
-  if (!userOtp || !email) {
-    return next(
-      new HandleGlobalError("OTP is not provided. Please provide it")
-    );
-  }
-
-  const actualOtp = await getUserOtpFromRedis(email);
-
-  if (!actualOtp) {
-    return next(
-      new HandleGlobalError("Time has expired. Please resend to verify")
-    );
-  }
-
-  if (otp !== +userOtp) {
-    return next(
-      new HandleGlobalError("OTP is incorrect. Please provide correct OTP")
-    );
-  }
+  await verifyOtp(email, otp);
 
   const user = await getNewUserByRedis(email);
 

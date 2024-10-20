@@ -1,5 +1,8 @@
-import { getFixedFromRedis, setFixedToRedis } from "../../redis/Fixed/fixed.js";
-import { getReq } from "../../utils/api/api.js";
+import {
+  getFixedFromRedis,
+  setFixedToRedis,
+} from "../../../redis/Fixed/fixed.js";
+import { getReq } from "../../../utils/api/api.js";
 
 const getFixed = async () => {
   const get = await getFixedFromRedis();

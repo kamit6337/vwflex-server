@@ -1,9 +1,5 @@
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import authRouter from "./routes/authRoutes.js";
-import userRouter from "./routes/userRoutes.js";
-import fixedRouter from "./routes/fixedRoutes.js";
-import moviesRouter from "./routes/moviesRoutes.js";
-import protectUserRoutes from "./middlewares/protectUserRoutes.js";
 import globalMiddlewares from "./middlewares/globalMiddlwares.js";
 import socketConnect from "./lib/socketConnect.js";
 import socketAuthMiddleware from "./middlewares/socketAuthMiddleware.js";
@@ -60,9 +56,6 @@ const init = async () => {
 
     // NOTE: DIFFERENT ROUTES
     app.use("/auth", authRouter);
-    app.use("/user", protectUserRoutes, userRouter);
-    app.use("/fixed", fixedRouter);
-    app.use("/movies", moviesRouter);
 
     // NOTE: UNIDENTIFIED ROUTES
     app.all("*", unIdentifiedUrlError);
