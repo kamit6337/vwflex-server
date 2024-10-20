@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build the Docker image
-        run: docker build -t <dokcer-username-/-docker-image-name> ./server
+        run: docker build -t kamit6337/vwflex-server ./server
 
       - name: Push the Docker image to Docker Hub
-        run: docker push <dokcer-username-/-docker-image-name>
+        run: docker push kamit6337/vwflex-server
