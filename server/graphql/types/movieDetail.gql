@@ -23,5 +23,4 @@ type MovieDetail {
   video: Boolean
   vote_average: Float
   vote_count: Int
-  recommendations: [Movie]
 }

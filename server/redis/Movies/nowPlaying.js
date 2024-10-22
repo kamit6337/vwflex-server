@@ -1,6 +1,11 @@
+import checkRedisConnection from "../checkRedisConnection.js";
 import redisClient from "../redisClient.js";
 
 export const getNowPlayingFromRedis = async (page, limit = 20) => {
+  if (!checkRedisConnection) {
+    return null;
+  }
+
   const skip = (page - 1) * limit;
 
   const movieIds = await redisClient.zrevrange(
@@ -8,6 +13,10 @@ export const getNowPlayingFromRedis = async (page, limit = 20) => {
     skip,
     skip + limit - 1
   );
+
+  if (!movieIds || movieIds.length === 0) {
+    return null;
+  }
 
   const promises = movieIds.map((id) => redisClient.get(`Movie:${id}`));
   const getMovies = await Promise.all(promises);
@@ -20,6 +29,10 @@ export const getNowPlayingFromRedis = async (page, limit = 20) => {
 };
 
 export const setNowPlayingToRedis = async (movies) => {
+  if (!checkRedisConnection) {
+    return null;
+  }
+
   if (!movies || movies.length === 0) return;
 
   const multi = redisClient.multi();

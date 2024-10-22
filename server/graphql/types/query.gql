@@ -1,6 +1,6 @@
 type Query {
   getLoginCheck: User
   getNowPlaying: [Movie]
-  getMovie(id: ID!): Movie
+  getMovie(id: ID!): MovieDetail
   getFixed: Fixed
 }

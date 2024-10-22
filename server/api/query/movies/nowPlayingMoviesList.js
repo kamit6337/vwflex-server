@@ -1,10 +1,14 @@
+import {
+  getNowPlayingFromRedis,
+  setNowPlayingToRedis,
+} from "../../../redis/Movies/nowPlaying.js";
 import { getReq } from "../../../utils/api/api.js";
 
 const nowPlayingMoviesList = async (page = 1) => {
-  // const get = await getNowPlayingFromRedis(page);
-  // if (get) {
-  //   return get;
-  // }
+  const get = await getNowPlayingFromRedis(page);
+  if (get) {
+    return get;
+  }
 
   const nowPlayingMovies = await getReq("/movie/now_playing", {
     params: { page },
@@ -12,7 +16,7 @@ const nowPlayingMoviesList = async (page = 1) => {
 
   const response = nowPlayingMovies.results;
 
-  // await setNowPlayingToRedis(response);
+  await setNowPlayingToRedis(response);
 
   return response;
 };
