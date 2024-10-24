@@ -1,15 +1,14 @@
 import checkRedisConnection from "../checkRedisConnection.js";
 import redisClient from "../redisClient.js";
 
-export const getNowPlayingFromRedis = async (page, limit = 20) => {
-  if (!checkRedisConnection) {
-    return null;
-  }
+export const getMovieFromRedis = async (uniqueName, page, limit) => {
+  const check = checkRedisConnection();
+  if (!check) return null;
 
   const skip = (page - 1) * limit;
 
   const movieIds = await redisClient.zrevrange(
-    "Now_Playing",
+    uniqueName,
     skip,
     skip + limit - 1
   );
@@ -28,10 +27,9 @@ export const getNowPlayingFromRedis = async (page, limit = 20) => {
   return getMovies.map((movie) => JSON.parse(movie));
 };
 
-export const setNowPlayingToRedis = async (movies) => {
-  if (!checkRedisConnection) {
-    return null;
-  }
+export const setMovieToRedis = async (uniqueName, movies) => {
+  const check = checkRedisConnection();
+  if (!check) return null;
 
   if (!movies || movies.length === 0) return;
 
@@ -40,11 +38,11 @@ export const setNowPlayingToRedis = async (movies) => {
   for (const movie of movies) {
     const currentTime = Date.now();
 
-    multi.zadd("Now_Playing", currentTime, movie.id);
+    multi.zadd(uniqueName, currentTime, movie.id);
 
     multi.set(`Movie:${movie.id}`, JSON.stringify(movie), "EX", 3600);
   }
-  multi.expire("Now_Playing", 3600);
+  multi.expire(uniqueName, 3600);
 
   await multi.exec();
 };

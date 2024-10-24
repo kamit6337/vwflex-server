@@ -1,6 +1,17 @@
 type Query {
   getLoginCheck: User
-  getNowPlaying: [Movie]
-  getMovie(id: ID!): MovieDetail
+
   getFixed: Fixed
+
+  getNowPlayingMovies(page: Int!): [Movie]
+  getPopularMovies(page: Int!): [Movie]
+  getTopRatedMovies(page: Int!): [Movie]
+  getUpcomingMovies(page: Int!): [Movie]
+  getMovie(id: ID!): MovieDetail
+  getMovieRecommendations(page: Int!, id: Int!): [Movie]
+  getSimilarMovies(page: Int!, id: Int!): [Movie]
+  getMovieImages(id: Int!): [MovieImage]
+  getMovieReviews(id: Int!): [MovieReview]
+
+  getPopularPeoples(page: Int!): [Peoples]
 }

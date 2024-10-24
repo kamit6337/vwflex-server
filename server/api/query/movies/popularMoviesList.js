@@ -1,20 +1,25 @@
-import catchAsyncError from "../../../lib/catchAsyncError.js";
+import {
+  getPopularFromRedis,
+  setPopularToRedis,
+} from "../../../redis/Movies/moviesFromRedis.js";
 import { getReq } from "../../../utils/api/api.js";
 
-const popularMoviesList = catchAsyncError(async (page = 1) => {
+const popularMoviesList = async (page = 1) => {
+  const get = await getPopularFromRedis(page);
+
+  if (get) {
+    return get;
+  }
+
   const popularMovies = await getReq("/movie/popular", {
     params: { page },
   });
 
-  const response = {
-    totalPages: popularMovies.total_pages,
+  const response = popularMovies?.results;
 
-    page: popularMovies.page,
-    data: popularMovies.results,
-    message: "Popular Movies list",
-  };
+  await setPopularToRedis(response);
 
   return response;
-});
+};
 
 export default popularMoviesList;

@@ -1,0 +1,6 @@
+type AuthorDetails {
+  name: String
+  username: String
+  avatar_path: String
+  rating: Int
+}

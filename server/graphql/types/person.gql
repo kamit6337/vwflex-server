@@ -1,0 +1,13 @@
+type Person {
+  adult: Boolean
+  biography: String
+  birthday: String
+  deathday: String
+  gender: Int
+  id: Int
+  known_for_department: String
+  name: String
+  place_of_birth: String
+  popularity: Float
+  profile_path: String
+}

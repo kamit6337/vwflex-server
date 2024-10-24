@@ -13,4 +13,5 @@ type Movie {
   video: Boolean
   vote_average: Float
   vote_count: Int
+  media_type: String
 }

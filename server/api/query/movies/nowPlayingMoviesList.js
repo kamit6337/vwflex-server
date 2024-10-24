@@ -14,7 +14,7 @@ const nowPlayingMoviesList = async (page = 1) => {
     params: { page },
   });
 
-  const response = nowPlayingMovies.results;
+  const response = nowPlayingMovies?.results;
 
   await setNowPlayingToRedis(response);
 
