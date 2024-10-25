@@ -1,7 +1,7 @@
 import {
   getNowPlayingFromRedis,
   setNowPlayingToRedis,
-} from "../../../redis/Movies/nowPlaying.js";
+} from "../../../redis/Movies/moviesFromRedis.js";
 import { getReq } from "../../../utils/api/api.js";
 
 const nowPlayingMoviesList = async (page = 1) => {

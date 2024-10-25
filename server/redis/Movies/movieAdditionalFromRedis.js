@@ -1,9 +1,9 @@
-import checkRedisConnection from "../checkRedisConnection";
+import checkRedisConnection from "../checkRedisConnection.js";
 import {
   getMovieFromRedis,
   setMovieToRedis,
-} from "../functions/setAndGetMovies";
-import redisClient from "../redisClient";
+} from "../functions/setAndGetMovies.js";
+import redisClient from "../redisClient.js";
 
 const RECOMMENDATION = "Recommended-Movies";
 const SIMILAR = "Similar-Movies";
@@ -38,7 +38,12 @@ export const setMovieImagesToRedis = async (movieId, data) => {
 
   if (!movieId || !data) return;
 
-  await redisClient.set(`Movie-Images:${movieId}`, JSON.stringify(data), "EX", 3600);
+  await redisClient.set(
+    `Movie-Images:${movieId}`,
+    JSON.stringify(data),
+    "EX",
+    3600
+  );
 };
 
 export const getMovieReviewsFromRedis = async (movieId) => {
@@ -55,5 +60,10 @@ export const setMovieReviewsToRedis = async (movieId, data) => {
 
   if (!movieId || !data) return;
 
-  await redisClient.set(`Movie-Reviews:${movieId}`, JSON.stringify(data), "EX", 3600);
+  await redisClient.set(
+    `Movie-Reviews:${movieId}`,
+    JSON.stringify(data),
+    "EX",
+    3600
+  );
 };

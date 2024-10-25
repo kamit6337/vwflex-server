@@ -1,7 +1,7 @@
 import WatchlistTv from "../../models/WatchListTvModel.js";
 import { getTvShowPresentInUserWatchlist } from "../../redis/Watchlist/WatchlistTvShowsFromRedis.js";
 
-const isTvInWatchlist = catchAsyncError(async (userId, tvId, season) => {
+const isTvInWatchlist = async (userId, tvId, season) => {
   const get = await getTvShowPresentInUserWatchlist(userId, tvId, season);
 
   if (get) {
@@ -15,6 +15,6 @@ const isTvInWatchlist = catchAsyncError(async (userId, tvId, season) => {
   });
 
   return !!findTv;
-});
+};
 
 export default isTvInWatchlist;

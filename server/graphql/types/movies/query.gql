@@ -12,6 +12,6 @@ type Query {
   getMovieRecommendations(page: Int!, id: Int!): [Movie]
   getSimilarMovies(page: Int!, id: Int!): [Movie]
   getMovieImages(id: Int!): [Image]
-  getMovieReviews(id: Int!): [MovieReview]
+  getMovieReviews(id: Int!): [Review]
   getTrendingMovies(time: TimePeriod!): [Movie]
 }
