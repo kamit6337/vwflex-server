@@ -1,0 +1,5 @@
+type Search_Result {
+  movies: [Movie]
+  tv: [TV]
+  peoples: [People]
+}

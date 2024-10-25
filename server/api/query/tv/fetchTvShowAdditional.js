@@ -12,9 +12,9 @@ const fetchTvShowAdditional = async (
   id,
   {
     season = null,
-    images = false,
     recommendations = false,
     similar = false,
+    images = false,
     reviews = false,
     page = 1,
   }

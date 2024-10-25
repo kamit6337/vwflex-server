@@ -1,8 +1,9 @@
+enum TimePeriod {
+  Week
+  Day
+}
+
 type Query {
-  getLoginCheck: User
-
-  getFixed: Fixed
-
   getNowPlayingMovies(page: Int!): [Movie]
   getPopularMovies(page: Int!): [Movie]
   getTopRatedMovies(page: Int!): [Movie]
@@ -10,8 +11,7 @@ type Query {
   getMovie(id: ID!): MovieDetail
   getMovieRecommendations(page: Int!, id: Int!): [Movie]
   getSimilarMovies(page: Int!, id: Int!): [Movie]
-  getMovieImages(id: Int!): [MovieImage]
+  getMovieImages(id: Int!): [Image]
   getMovieReviews(id: Int!): [MovieReview]
-
-  getPopularPeoples(page: Int!): [Peoples]
+  getTrendingMovies(time: TimePeriod!): [Movie]
 }

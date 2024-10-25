@@ -1,0 +1,3 @@
+type Query {
+  getSearchResult(q: String!): Search_Result
+}

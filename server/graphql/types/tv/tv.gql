@@ -1,0 +1,17 @@
+type TV {
+  adult: Boolean
+  backdrop_path: String
+  first_air_date: String
+  genre_ids: [Int!]
+  id: Int
+  name: String!
+  original_language: String
+  original_name: String
+  origin_country: [String]
+  overview: String
+  popularity: Float
+  poster_path: String
+  vote_average: Float
+  vote_count: Int
+  media_type: String
+}

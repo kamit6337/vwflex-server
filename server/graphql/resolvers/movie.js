@@ -7,6 +7,7 @@ import getNowPlaying from "../../services/movies/getNowPlaying.js";
 import getPopularMovies from "../../services/movies/getPopularMovies.js";
 import getTopRatedMovies from "../../services/movies/getTopRatedMovies.js";
 import getUpcomingMovies from "../../services/movies/getUpcomingMovies.js";
+import getTrendingMovies from "../../services/trending/getTrendingMovies.js";
 
 const movieResolvers = {
   Query: {
@@ -19,6 +20,7 @@ const movieResolvers = {
     getSimilarMovies: getSimilarMovies,
     getMovieImages: getMovieImages,
     getMovieReviews: getMovieReviews,
+    getTrendingMovies: getTrendingMovies,
   },
 };
 

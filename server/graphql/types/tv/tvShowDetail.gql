@@ -1,0 +1,31 @@
+type TV_Show_Detail {
+  adult: Boolean
+  backdrop_path: String
+  created_by: [Created_By]
+  first_air_date: String
+  genres: [Genre]
+  id: Int
+  last_air_date: String
+  name: String!
+  number_of_episodes: Int!
+  number_of_seasons: Int!
+  original_name: String
+  origin_country: [String]
+  overview: String
+  popularity: Float
+  poster_path: String
+  production_companies: [Production_Companies]
+  production_countries: [Production_Countries]
+  spoken_languages: [Spoken_Language]
+  tagline: String
+  vote_average: Float
+  vote_count: Int
+  media_type: String
+}
+
+type Created_By {
+  id: Int!
+  name: String
+  original_name: String
+  profile_path: String
+}

@@ -7,3 +7,10 @@ type Review {
   updated_at: String
   url: String
 }
+
+type AuthorDetails {
+  name: String
+  username: String
+  avatar_path: String
+  rating: Int
+}

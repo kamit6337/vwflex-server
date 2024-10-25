@@ -1,0 +1,12 @@
+enum TimePeriod {
+  Week
+  Day
+}
+
+type Query {
+  getPopularPeoples(page: Int!): [People]
+  getPersonDetail(id: ID!): Person
+  getPersonImages(id: ID!): [Image]
+  getPersonCredits(id: ID!): Credit
+  getTrendingPeoples(time: TimePeriod!): [People]
+}

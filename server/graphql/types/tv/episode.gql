@@ -1,0 +1,25 @@
+type Episode {
+  air_date: String
+  crew: [Crew]
+  episode_number: Int
+  guest_stars: [Crew]
+  id: Int
+  name: String
+  overview: String
+  runtime: Int
+  season_number: Int
+  show_id: Int
+  still_path: String
+  vote_average: Float
+  vote_count: Int
+}
+
+type Crew {
+  department: String
+  id: Int
+  job: String
+  known_for_department: String
+  name: String
+  original_name: String
+  profile_path: String
+}

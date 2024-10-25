@@ -1,7 +1,6 @@
-import catchAsyncError from "@lib/catchAsyncError";
-import { getReq } from "@utils/api/serverApi";
+import { getReq } from "../../../utils/api/api.js";
 
-const searchQuery = catchAsyncError(async (q, { page = 1 } = {}) => {
+const searchQuery = async (q, { page = 1 } = {}) => {
   const search = await getReq("/search/multi", {
     params: { query: q, page },
   });
@@ -19,14 +18,12 @@ const searchQuery = catchAsyncError(async (q, { page = 1 } = {}) => {
   });
 
   const response = {
-    page: search?.page,
-    totalPages: search?.total_pages,
     movies: movieSearch,
     tv: tvSearch,
     peoples: personSearch,
   };
 
   return response;
-});
+};
 
 export default searchQuery;

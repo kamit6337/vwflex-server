@@ -1,4 +1,4 @@
-type MovieImage {
+type Image {
   ratio: Float!
   path: String!
 }

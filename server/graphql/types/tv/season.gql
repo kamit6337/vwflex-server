@@ -1,0 +1,11 @@
+type Season {
+  air_date: String
+  episodes: Episode
+  id: Int
+  name: String!
+  overview: String
+  popularity: Float
+  poster_path: String
+  season_number: String
+  vote_average: Float
+}

@@ -1,0 +1,18 @@
+enum Time_Period {
+  Week
+  Day
+}
+
+type Query {
+  getAiringTodayTvShows(page: Int!): [TV]
+  getOnTheAirTvShows(page: Int!): [TV]
+  getPopularTvShows(page: Int!): [TV]
+  getTopRatedTvShows(page: Int!): [TV]
+  getTrendingTvShows(time: Time_Period!): [TV]
+  getTvShowDetails(id: Int!): TV_Show_Detail
+  getTvShowSeason(id: Int!, season: Int!): Season
+  getTvShowRecommendation(id: Int!, page: Int!): [TV]
+  getTvShowSimilar(id: Int!, page: Int!): [TV]
+  getTvShowImage(id: Int!): [Image]
+  getTvShowReviews(id: Int!): [Review]
+}

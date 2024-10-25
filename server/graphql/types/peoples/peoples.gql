@@ -1,4 +1,4 @@
-type Peoples {
+type People {
   adult: Boolean!
   gender: Int
   id: Int!

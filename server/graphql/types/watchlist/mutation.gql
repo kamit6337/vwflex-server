@@ -1,0 +1,6 @@
+type Mutation {
+  deleteWatchlistMovie(id: Int!): String!
+  deleteWatchlistTvShow(id: Int!, season: Int!): String!
+  postWatchlistMovie(id: Int!): MovieDetail!
+  postWatchlistTvShow(id: Int!, season: Int!): Season!
+}
