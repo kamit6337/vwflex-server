@@ -7,7 +7,7 @@ export const getTvFromRedis = async (uniqueName, page, limit) => {
 
   const skip = (page - 1) * limit;
 
-  const TvIds = await redisClient.zrevrange(uniqueName, skip, skip + limit - 1);
+  const TvIds = await redisClient.zrange(uniqueName, skip, skip + limit - 1);
 
   if (!TvIds || TvIds.length === 0) {
     return null;

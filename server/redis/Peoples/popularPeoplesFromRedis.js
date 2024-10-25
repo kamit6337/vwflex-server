@@ -7,7 +7,7 @@ export const getPopularPeoplesFromRedis = async (page, limit = 20) => {
 
   const skip = (page - 1) * limit;
 
-  const peoplesId = await redisClient.zrevrange(
+  const peoplesId = await redisClient.zrange(
     "Popular-Peoples",
     skip,
     skip + limit - 1

@@ -7,11 +7,7 @@ export const getMovieFromRedis = async (uniqueName, page, limit) => {
 
   const skip = (page - 1) * limit;
 
-  const movieIds = await redisClient.zrevrange(
-    uniqueName,
-    skip,
-    skip + limit - 1
-  );
+  const movieIds = await redisClient.zrange(uniqueName, skip, skip + limit - 1);
 
   if (!movieIds || movieIds.length === 0) {
     return null;
