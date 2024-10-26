@@ -31,13 +31,15 @@ export const setTvToRedis = async (uniqueName, TvShows) => {
 
   const multi = redisClient.multi();
 
-  for (const Tv of TvShows) {
-    const currentTime = Date.now();
+  const baseTime = Date.now();
 
-    multi.zadd(uniqueName, currentTime, Tv.id);
+  TvShows.forEach((Tv, index) => {
+    const updatedTime = baseTime + index;
 
+    multi.zadd(uniqueName, updatedTime, Tv.id);
     multi.set(`Tv:${Tv.id}`, JSON.stringify(Tv), "EX", 3600);
-  }
+  });
+
   multi.expire(uniqueName, 3600);
 
   await multi.exec();
