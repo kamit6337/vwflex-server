@@ -1,4 +1,5 @@
 import checkRedisConnection from "../checkRedisConnection.js";
+import { getTvFromRedis, setTvToRedis } from "../functions/setAndGetTvShows.js";
 import redisClient from "../redisClient.js";
 
 const RECOMMENDATION = "Recommended-Tv-Shows";
