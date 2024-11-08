@@ -1,9 +1,13 @@
 import {
+  getTvShowRecommendations,
   getTvShowSeasonFromRedis,
   getTvShowsImagesFromRedis,
+  getTvShowSimilar,
   getTvShowsReviewsFromRedis,
+  setTvShowRecommendations,
   setTvShowSeasonIntoRedis,
   setTvShowsImagesToRedis,
+  setTvShowSimilar,
   setTvShowsReviewsToRedis,
 } from "../../../redis/TvShows/tvShowAdditionalFromRedis.js";
 import { getReq } from "../../../utils/api/api.js";

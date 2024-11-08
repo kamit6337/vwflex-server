@@ -1,4 +1,3 @@
-import { getTvShowSimilar } from "../../redis/TvShows/tvShowAdditionalFromRedis.js";
 import getTrendingTvShows from "../../services/trending/getTrendingTvShows.js";
 import getAiringTodayTvShows from "../../services/tvShows/getAiringTodayTvShows.js";
 import getOnTheAirTvShows from "../../services/tvShows/getOnTheAirTvShows.js";
@@ -7,8 +6,10 @@ import getTopRatedTvShows from "../../services/tvShows/getTopRatedTvShows.js";
 import getTvShowDetails from "../../services/tvShowSingle/getTvShowDetails.js";
 import getTvShowImage from "../../services/tvShowSingle/getTvShowImage.js";
 import getTvShowRecommendation from "../../services/tvShowSingle/getTvShowRecommendation.js";
+
 import getTvShowReviews from "../../services/tvShowSingle/getTvShowReviews.js";
 import getTvShowSeason from "../../services/tvShowSingle/getTvShowSeason.js";
+import getTvShowSimilar from "../../services/tvShowSingle/getTvShowSimilar.js";
 
 const tvShowResolver = {
   Query: {
