@@ -1,6 +1,6 @@
 type Season {
   air_date: String
-  episodes: Episode
+  episodes: [Episode]
   id: Int
   name: String!
   overview: String
