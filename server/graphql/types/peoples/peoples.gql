@@ -1,3 +1,5 @@
+union KnownFor = Movie | TV
+
 type People {
   adult: Boolean!
   gender: Int
@@ -7,5 +9,5 @@ type People {
   original_name: String!
   popularity: Float
   profile_path: String
-  known_for: [Movie]
+  known_for: [KnownFor]
 }
