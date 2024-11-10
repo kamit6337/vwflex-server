@@ -1,3 +1,4 @@
+import checkRedisConnection from "../checkRedisConnection.js";
 import redisClient from "../redisClient.js";
 
 export const getPersonTvShowsFromRedis = async (personId) => {
