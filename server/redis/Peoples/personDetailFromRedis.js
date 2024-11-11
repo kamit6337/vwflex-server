@@ -19,5 +19,10 @@ export const setPersonDetailIntoRedis = async (person) => {
 
   if (!person) return;
 
-  await redisClient.set(`Person-Details:${person.id}`, JSON.stringify(person));
+  await redisClient.set(
+    `Person-Details:${person.id}`,
+    JSON.stringify(person),
+    "EX",
+    3600
+  );
 };
