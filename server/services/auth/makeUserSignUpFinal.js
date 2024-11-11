@@ -40,6 +40,8 @@ const makeUserSignUpFinal = catchGraphQLError(
       role: createUser.role,
     });
 
+    console.log("token", token);
+
     return token;
   }
 );
