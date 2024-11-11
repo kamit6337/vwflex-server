@@ -11,6 +11,10 @@ export const getUserByEmailRedis = async (email) => {
 };
 
 export const setUserIntoRedis = async (user) => {
+  if (!user) {
+    return;
+  }
+
   await redisClient.set(
     `User-Id:${user._id.toString()}`,
     JSON.stringify(user),
