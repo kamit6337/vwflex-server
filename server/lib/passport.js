@@ -6,8 +6,8 @@ import { environment } from "../utils/environment.js";
 passport.use(
   new GoogleStrategy(
     {
-      clientID: environment.GOOGLE_CLIENT_ID,
-      clientSecret: environment.GOOGLE_CLIENT_SECRET,
+      clientID: environment.GOOGLE_OAUTH_CLIENT_ID,
+      clientSecret: environment.GOOGLE_OAUTH_CLIENT_SECRET,
       callbackURL: `/auth/google/callback`,
     },
     function (accessToken, refreshToken, profile, done) {

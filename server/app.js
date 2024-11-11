@@ -1,3 +1,4 @@
+import "./lib/passport.js";
 import globalErrorHandler from "./middlewares/globalErrorHandler.js";
 import authRouter from "./routes/authRoutes.js";
 import globalMiddlewares from "./middlewares/globalMiddlwares.js";
