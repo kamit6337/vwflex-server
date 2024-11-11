@@ -33,8 +33,10 @@ const makeUserSignUpFinal = catchGraphQLError(
       throw new Error("Issue in Signup. Please try later", 404);
     }
 
+    console.log("createUser", createUser);
+
     const token = encrypt({
-      id: createUser._id,
+      id: createUser._id.toString(),
       role: createUser.role,
     });
 
