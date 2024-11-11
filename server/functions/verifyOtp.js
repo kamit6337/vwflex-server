@@ -11,7 +11,7 @@ const verifyOtp = async (email, userOtp) => {
     throw new Error("Time has expired. Please resend to verify");
   }
 
-  if (actualOtp !== +userOtp) {
+  if (actualOtp?.toString() !== userOtp?.toString()) {
     throw new Error("OTP is incorrect. Please provide correct OTP");
   }
 };
