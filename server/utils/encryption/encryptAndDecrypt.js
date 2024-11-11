@@ -1,8 +1,8 @@
 import crypto from "crypto";
 import { environment } from "../environment.js";
 
-const ENCRYPTION_KEY = environment.ENCRYPTION_KEY;
-const ENCRYPTION_IV = environment.ENCRYPTION_IV;
+const ENCRYPTION_KEY = environment.ENCRYPTION_SECRET_KEY;
+const ENCRYPTION_IV = environment.ENCRYPTION_SECRET_IV;
 
 const algorithm = "aes-256-cbc";
 
