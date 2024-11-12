@@ -11,9 +11,9 @@ const deleteUserWatchlistMovie = async (userId, movieId) => {
     id: movieId,
   });
 
-  await deleteSingleUserWatchlistMovieFromRedis(userid, movieId);
+  await deleteSingleUserWatchlistMovieFromRedis(userId, movieId);
 
-  return "Movie remove from Watchlist Successfully";
+  return false;
 };
 
 export default deleteUserWatchlistMovie;

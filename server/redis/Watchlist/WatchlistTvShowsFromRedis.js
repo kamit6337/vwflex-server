@@ -88,18 +88,22 @@ export const setUserWatchlistTvShowsIntoRedis = async (userId, tvShows) => {
   await multi.exec();
 };
 
-export const setSingleUserWatchlistTvShowIntoRedis = async (userId, tvShow) => {
+export const setSingleUserWatchlistTvShowIntoRedis = async (
+  userId,
+  tvId,
+  season
+) => {
   const check = checkRedisConnection();
 
   if (!check) return null;
 
-  if (!userId || !tvShow) return;
+  if (!userId || !tvId || !season) return;
 
   const getTvShows = await redisClient.get(`User-Watchlist-TvShows:${userId}`);
 
   const obj = {
-    id: tvShow.id,
-    season: tvShow.season,
+    id: tvId,
+    season: season,
   };
 
   let updatedTvShows;
@@ -115,11 +119,6 @@ export const setSingleUserWatchlistTvShowIntoRedis = async (userId, tvShow) => {
     updatedTvShows,
     "EX",
     3600
-  );
-
-  await redisClient.set(
-    `TV-Shows-Season:${tvShow.id}:${tvShow.season}`,
-    JSON.stringify(tvShow)
   );
 };
 

@@ -4,19 +4,31 @@ import redisClient from "../redisClient.js";
 export const getMoviePresentInUserWatchlist = async (userId, movieId) => {
   const check = checkRedisConnection();
   if (!check) return null;
-  const get = await redisClient.sismember(
+  const score = await redisClient.zscore(
     `User-Watchlist-Movies:${userId}`,
     movieId
   );
-  return !!get;
+
+  if (score !== null) return score;
+
+  const actualScore = await redisClient.zscore(
+    `User-Actual-Watchlist-Movies:${userId}`,
+    movieId
+  );
+
+  if (actualScore !== null) return actualScore;
+
+  return null;
 };
 
 export const getUserWatchlistMoviesFromRedis = async (userId) => {
   const check = checkRedisConnection();
   if (!check) return null;
 
-  const movieIds = await redisClient.smembers(
-    `User-Watchlist-Movies:${userId}`
+  const movieIds = await redisClient.zrange(
+    `User-Actual-Watchlist-Movies:${userId}`,
+    0,
+    -1
   );
 
   if (!movieIds || movieIds.length === 0) return null;
@@ -40,25 +52,49 @@ export const setUserWatchlistMoviesIntoRedis = async (userId, movies) => {
 
   const multi = redisClient.multi();
 
+  let currentDate = Date.now();
+
   for (const movie of movies) {
-    multi.sadd(`User-Watchlist-Movies:${userId}`, movie.id);
+    currentDate = currentDate + 1;
+
+    multi.zadd(`User-Actual-Watchlist-Movies:${userId}`, currentDate, movie.id);
+
+    multi.zadd(`User-Watchlist-Movies:${userId}`, currentDate, movie.id);
+
     multi.set(`Movie:${movie.id}`, JSON.stringify(movie), "EX", 3600);
   }
 
+  multi.expire(`User-Actual-Watchlist-Movies:${userId}`, 3600);
   multi.expire(`User-Watchlist-Movies:${userId}`, 3600);
 
   await multi.exec();
 };
 
-export const setSingleUserWatchlistMovieIntoRedis = async (userId, movie) => {
+export const setSingleUserWatchlistMovieIntoRedis = async (userId, movieId) => {
   const check = checkRedisConnection();
 
   if (!check) return null;
 
-  if (!userId || !movie) return;
+  if (!userId || !movieId) return;
+  let currentDate = Date.now();
 
-  await redisClient.sadd(`User-Watchlist-Movies:${userId}`, movie.id);
-  await redisClient.set(`Movie:${movie.id}`, JSON.stringify(movie), "EX", 3600);
+  await redisClient.zadd(
+    `User-Watchlist-Movies:${userId}`,
+    currentDate,
+    movieId
+  );
+
+  const isAlreadyPresent = await redisClient.exists(
+    `User-Actual-Watchlist-Movies:${userId}`
+  );
+
+  if (!isAlreadyPresent) return;
+
+  await redisClient.zadd(
+    `User-Actual-Watchlist-Movies:${userId}`,
+    currentDate,
+    movieId
+  );
 };
 
 export const deleteSingleUserWatchlistMovieFromRedis = async (
@@ -71,5 +107,11 @@ export const deleteSingleUserWatchlistMovieFromRedis = async (
 
   if (!userId || !movieId) return;
 
-  await redisClient.srem(`User-Watchlist-Movies:${userId}`, movieId);
+  const multi = redisClient.multi();
+
+  multi.zrem(`User-Watchlist-Movies:${userId}`, movieId);
+
+  multi.zrem(`User-Actual-Watchlist-Movies:${userId}`, movieId);
+
+  await multi.exec();
 };

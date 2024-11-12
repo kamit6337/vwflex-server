@@ -14,7 +14,7 @@ const deleteUserWatchlistTvShow = async (userId, tvId, season) => {
 
   await deleteSingleUserWatchlistTvShowFromRedis(userId, tvId, season);
 
-  return "Tv Show removed from watchlist";
+  return false;
 };
 
 export default deleteUserWatchlistTvShow;

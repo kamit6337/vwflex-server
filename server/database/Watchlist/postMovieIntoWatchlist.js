@@ -1,4 +1,3 @@
-import fetchMovieDetail from "../../api/query/movie/fetchMovieDetail.js";
 import WatchlistMovie from "../../models/WatchlistMovieModel.js";
 import { setSingleUserWatchlistMovieIntoRedis } from "../../redis/Watchlist/watchlistMoviesFromRedis.js";
 
@@ -12,11 +11,9 @@ const postMovieIntoWatchlist = async (userId, movieId) => {
     id: movieId,
   });
 
-  const movie = await fetchMovieDetail(movieId);
+  await setSingleUserWatchlistMovieIntoRedis(userId, movieId);
 
-  await setSingleUserWatchlistMovieIntoRedis(userId, movie);
-
-  return movie;
+  return true;
 };
 
 export default postMovieIntoWatchlist;

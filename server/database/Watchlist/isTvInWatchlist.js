@@ -1,11 +1,14 @@
 import WatchlistTv from "../../models/WatchListTvModel.js";
-import { getTvShowPresentInUserWatchlist } from "../../redis/Watchlist/WatchlistTvShowsFromRedis.js";
+import {
+  getTvShowPresentInUserWatchlist,
+  setSingleUserWatchlistTvShowIntoRedis,
+} from "../../redis/Watchlist/WatchlistTvShowsFromRedis.js";
 
 const isTvInWatchlist = async (userId, tvId, season) => {
   const get = await getTvShowPresentInUserWatchlist(userId, tvId, season);
 
   if (get) {
-    return get;
+    return true;
   }
 
   const findTv = await WatchlistTv.exists({
@@ -13,6 +16,10 @@ const isTvInWatchlist = async (userId, tvId, season) => {
     tvId: Number(tvId),
     season: Number(season),
   });
+
+  if (!!findTv) {
+    await setSingleUserWatchlistTvShowIntoRedis(userId, tvId, season);
+  }
 
   return !!findTv;
 };
