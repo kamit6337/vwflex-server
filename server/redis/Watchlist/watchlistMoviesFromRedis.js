@@ -25,7 +25,7 @@ export const getUserWatchlistMoviesFromRedis = async (userId) => {
   const check = checkRedisConnection();
   if (!check) return null;
 
-  const movieIds = await redisClient.zrange(
+  const movieIds = await redisClient.zrevrange(
     `User-Actual-Watchlist-Movies:${userId}`,
     0,
     -1
