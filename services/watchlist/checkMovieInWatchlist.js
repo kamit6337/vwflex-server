@@ -8,8 +8,11 @@ const checkMovieInWatchlist = catchGraphQLError(
 
     const { id } = args;
 
-    const get = await isMovieInWatchlist(user._id, id);
-    return get;
+    const bool = await isMovieInWatchlist(user._id, id);
+    return {
+      id,
+      bool,
+    };
   }
 );
 

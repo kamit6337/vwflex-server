@@ -6,8 +6,12 @@ const deleteWatchlistTvShow = catchGraphQLError(
   async (parent, args, contextValue) => {
     const user = await Req(contextValue.req);
     const { id, season } = args;
-    const get = await deleteUserWatchlistTvShow(user._id, id, season);
-    return get;
+    const bool = await deleteUserWatchlistTvShow(user._id, id, season);
+
+    return {
+      id: `${id}${season}`,
+      bool,
+    };
   }
 );
 

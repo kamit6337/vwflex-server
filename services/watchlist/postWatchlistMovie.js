@@ -7,8 +7,11 @@ const postWatchlistMovie = catchGraphQLError(
     const user = await Req(contextValue.req);
 
     const { id } = args;
-    const get = await postMovieIntoWatchlist(user._id, id);
-    return get;
+    const bool = await postMovieIntoWatchlist(user._id, id);
+    return {
+      id,
+      bool,
+    };
   }
 );
 

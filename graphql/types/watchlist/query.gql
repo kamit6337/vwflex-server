@@ -1,6 +1,11 @@
 type Query {
   getWatchlistMovies: [MovieDetail!]
   getWatchlistTvShows: [Season!]
-  checkMovieInWatchlist(id: Int!): Boolean!
-  checkTvShowInWatchlist(id: Int!, season: Int!): Boolean!
+  checkMovieInWatchlist(id: Int!): Response!
+  checkTvShowInWatchlist(id: Int!, season: Int!): Response!
+}
+
+type Response {
+  id: ID!
+  bool: Boolean!
 }
