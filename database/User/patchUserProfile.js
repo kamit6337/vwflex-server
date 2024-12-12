@@ -1,23 +1,19 @@
-import User from "../../models/UserModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import { setUserIntoRedis } from "../../redis/User/user.js";
 
 const patchUserProfile = async (userId, obj) => {
-  const user = await User.findOneAndUpdate(
-    {
-      _id: userId,
-    },
-    {
-      ...obj,
-    },
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  const { data, error } = await supabaseClient
+    .from("user")
+    .update(obj)
+    .eq("id", userId);
 
-  await setUserIntoRedis(user);
+  if (error) {
+    throw new Error(error);
+  }
 
-  return user;
+  await setUserIntoRedis(data);
+
+  return data;
 };
 
 export default patchUserProfile;

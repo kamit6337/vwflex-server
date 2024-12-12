@@ -1,14 +1,16 @@
-import User from "../../models/UserModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import { setUserIntoRedis } from "../../redis/User/user.js";
 
 const postCreateUser = async (obj) => {
-  const createUser = await User.create({
-    ...obj,
-  });
+  const { data, error } = await supabaseClient.from("user").insert([obj]);
 
-  await setUserIntoRedis(createUser);
+  if (error) {
+    throw new Error(error);
+  }
 
-  return createUser;
+  await setUserIntoRedis(data);
+
+  return data;
 };
 
 export default postCreateUser;

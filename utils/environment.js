@@ -5,6 +5,7 @@ export const environment = {
   PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
   CLIENT_URL: process.env.CLIENT_URL,
+  SUPABASE_KEY: process.env.SUPABASE_KEY,
   MONGO_DB_URI: process.env.MONGO_DB_URI,
   JWT_EXPIRES_IN: Number(process.env.JWT_EXPIRES_IN) || 2592000000, // 30 days
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,

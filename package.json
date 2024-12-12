@@ -21,6 +21,7 @@
     "@aws-sdk/s3-request-presigner": "^3.631.0",
     "@graphql-tools/load-files": "^7.0.0",
     "@graphql-tools/merge": "^9.0.8",
+    "@supabase/supabase-js": "^2.47.3",
     "axios": "^1.5.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",

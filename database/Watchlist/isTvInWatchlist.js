@@ -1,4 +1,4 @@
-import WatchlistTv from "../../models/WatchListTvModel.js";
+import WatchlistTv from "../../models/WatchlistTvModel.js";
 import {
   getTvShowPresentInUserWatchlist,
   setSingleUserWatchlistTvShowIntoRedis,

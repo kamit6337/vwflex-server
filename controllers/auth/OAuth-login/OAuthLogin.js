@@ -24,7 +24,7 @@ const OAuthLogin = catchAsyncError(async (req, res, next) => {
   if (!findUser) {
     // MARK: IF NOT FIND USER
 
-    const photo = await uploadProfileImageToS3(picture);
+    const photo = picture;
 
     const obj = {
       name,

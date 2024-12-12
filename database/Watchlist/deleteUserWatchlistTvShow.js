@@ -1,4 +1,5 @@
-import WatchlistTv from "../../models/WatchListTvModel.js";
+import WatchlistTv from "../../models/WatchlistTvModel.js";
+
 import { deleteSingleUserWatchlistTvShowFromRedis } from "../../redis/Watchlist/WatchlistTvShowsFromRedis.js";
 
 const deleteUserWatchlistTvShow = async (userId, tvId, season) => {

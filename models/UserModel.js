@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  OAuthId: {
+    type: String,
+    default: null,
+  },
+  OAuthProvider: {
+    type: String,
+    default: null,
+  },
   role: {
     type: String,
     enum: ["user", "admin"],
