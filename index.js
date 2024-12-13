@@ -8,7 +8,7 @@ const PORT = environment.PORT || 8080;
 (async () => {
   try {
     console.log("Connecting to MongoDB...");
-    await connectToDB();
+    // await connectToDB();
 
     app.listen(PORT, () => {
       console.log(`Server is connected on port ${PORT}`);

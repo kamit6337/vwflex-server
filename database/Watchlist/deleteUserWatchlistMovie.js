@@ -1,4 +1,4 @@
-import WatchlistMovie from "../../models/WatchlistMovieModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import { deleteSingleUserWatchlistMovieFromRedis } from "../../redis/Watchlist/watchlistMoviesFromRedis.js";
 
 const deleteUserWatchlistMovie = async (userId, movieId) => {
@@ -6,10 +6,15 @@ const deleteUserWatchlistMovie = async (userId, movieId) => {
     throw new Error("UserId or MovieId is not provided");
   }
 
-  await WatchlistMovie.deleteOne({
-    user: userId,
-    id: movieId,
-  });
+  const { error } = await supabaseClient
+    .from("watchlist_movies")
+    .delete()
+    .eq("user", userId)
+    .eq("id", movieId);
+
+  if (error) {
+    throw new Error(error);
+  }
 
   await deleteSingleUserWatchlistMovieFromRedis(userId, movieId);
 

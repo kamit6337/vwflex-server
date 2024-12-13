@@ -8,24 +8,24 @@ const makeLoginUser = catchGraphQLError(async (parent, args, contextValue) => {
   const { email, password } = args;
 
   if (!email || !password) {
-    throw new GraphQLError("Email or Password is not provided", 404);
+    throw new GraphQLError("Email or Password is not provided");
   }
 
   const findUser = await getUserByEmail(email);
 
   if (!findUser) {
-    throw new GraphQLError("Email or Password is incorrect", 404);
+    throw new GraphQLError("Email is incorrect");
   }
 
   if (!findUser.password) {
-    throw new GraphQLError("Please reset your password to login", 404);
+    throw new GraphQLError("Please reset your password to login");
   }
 
   //   MARK: IF USER PASSWORD DOES NOT MATCH WITH HASH PASSWORD, THROW ERROR
   const isPasswordValid = verifyUserPassword(findUser.password, password);
 
   if (!isPasswordValid) {
-    throw new GraphQLError("Email or Password is incorrect", 404);
+    throw new GraphQLError("Password is incorrect");
   }
 
   //   MARK: USER EMAIL AND PASSWORD IS CONFIRMED, SEND TOKEN AND MAKE LOGIN

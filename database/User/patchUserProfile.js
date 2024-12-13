@@ -3,9 +3,9 @@ import { setUserIntoRedis } from "../../redis/User/user.js";
 
 const patchUserProfile = async (userId, obj) => {
   const { data, error } = await supabaseClient
-    .from("user")
+    .from("users")
     .update(obj)
-    .eq("id", userId);
+    .eq("_id", userId);
 
   if (error) {
     throw new Error(error);

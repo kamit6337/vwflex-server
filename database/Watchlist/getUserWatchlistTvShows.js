@@ -1,5 +1,4 @@
 import fetchTvShowAdditional from "../../api/query/tv/fetchTvShowAdditional.js";
-import WatchlistTv from "../../models/WatchListTvModel.js";
 import {
   getUserWatchlistTvShowsFromRedis,
   setUserWatchlistTvShowsIntoRedis,
@@ -16,23 +15,23 @@ const getUserWatchlistTvShows = async (userId) => {
     return get;
   }
 
-  const tvShows = await WatchlistTv.find({
-    user: userId,
-  })
-    .lean()
-    .sort("-createdAt");
+  // const tvShows = await WatchlistTv.find({
+  //   user: userId,
+  // })
+  //   .lean()
+  //   .sort("-createdAt");
 
-  const response = JSON.parse(JSON.stringify(tvShows));
+  // const response = JSON.parse(JSON.stringify(tvShows));
 
-  const tvShowsDetails = response.map(async (obj) => {
-    const { id, season } = obj;
-    const get = await fetchTvShowAdditional(id, { season });
-    return { ...get, id: id, season: season };
-  });
+  // const tvShowsDetails = response.map(async (obj) => {
+  //   const { id, season } = obj;
+  //   const get = await fetchTvShowAdditional(id, { season });
+  //   return { ...get, id: id, season: season };
+  // });
 
-  await setUserWatchlistTvShowsIntoRedis(userId, tvShowsDetails);
+  // await setUserWatchlistTvShowsIntoRedis(userId, tvShowsDetails);
 
-  return tvShowsDetails;
+  return "bye";
 };
 
 export default getUserWatchlistTvShows;

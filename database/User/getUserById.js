@@ -8,18 +8,19 @@ const getUserById = async (userId) => {
   }
 
   const { data, error } = await supabaseClient
-    .from("user")
+    .from("users")
     .select("*")
-    .eq("id", userId)
-    .single();
+    .eq("_id", userId);
 
   if (error) {
     throw new Error(error);
   }
 
-  await setUserIntoRedis(data);
+  const user = data[0];
 
-  return data;
+  await setUserIntoRedis(user);
+
+  return user;
 };
 
 export default getUserById;
