@@ -1,3 +1,4 @@
+import supabaseClient from "../../lib/supabaseClient.js";
 import { deleteSingleUserWatchlistTvShowFromRedis } from "../../redis/Watchlist/WatchlistTvShowsFromRedis.js";
 
 const deleteUserWatchlistTvShow = async (userId, tvId, season) => {
@@ -5,13 +6,18 @@ const deleteUserWatchlistTvShow = async (userId, tvId, season) => {
     throw new Error("All field is required");
   }
 
-  // await WatchlistTv.deleteOne({
-  //   user: userId,
-  //   id: tvId,
-  //   season,
-  // });
+  const { error } = await supabaseClient
+    .from("watchlist_tv")
+    .delete()
+    .eq("user", userId)
+    .eq("id", tvId)
+    .eq("season", season);
 
-  // await deleteSingleUserWatchlistTvShowFromRedis(userId, tvId, season);
+  if (error) {
+    throw new Error(error);
+  }
+
+  await deleteSingleUserWatchlistTvShowFromRedis(userId, tvId, season);
 
   return false;
 };

@@ -5,24 +5,23 @@ import {
 } from "../../redis/User/user.js";
 
 const getUserByEmail = async (email) => {
-  // const get = await getUserByEmailRedis(email);
+  const get = await getUserByEmailRedis(email);
 
-  // if (get) {
-  //   return get;
-  // }
-
-  console.log("email", email);
+  if (get) {
+    return get;
+  }
 
   const { data, error } = await supabaseClient.from("users").select("*");
 
-  console.log("Data", data);
   if (error) {
     throw new Error(`GET USER BY EMAIL error  : ${error}`);
   }
 
-  // await setUserIntoRedis(data);
+  const user = data[0];
 
-  return data[0];
+  await setUserIntoRedis(data);
+
+  return user;
 };
 
 export default getUserByEmail;

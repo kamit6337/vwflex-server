@@ -1,4 +1,4 @@
-import WatchlistMovie from "../../models/WatchlistMovieModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import { setSingleUserWatchlistMovieIntoRedis } from "../../redis/Watchlist/watchlistMoviesFromRedis.js";
 
 const postMovieIntoWatchlist = async (userId, movieId) => {
@@ -6,10 +6,20 @@ const postMovieIntoWatchlist = async (userId, movieId) => {
     throw new Error("UserId or MovieId is not provided");
   }
 
-  await WatchlistMovie.create({
-    user: userId,
-    id: movieId,
-  });
+  const { error } = await supabaseClient
+    .from("watchlist_movies")
+    .insert([
+      {
+        user: userId,
+        id: movieId,
+      },
+    ])
+    .select()
+    .single();
+
+  if (error) {
+    throw new Error(error);
+  }
 
   await setSingleUserWatchlistMovieIntoRedis(userId, movieId);
 

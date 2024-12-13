@@ -5,7 +5,9 @@ const patchUserProfile = async (userId, obj) => {
   const { data, error } = await supabaseClient
     .from("users")
     .update(obj)
-    .eq("_id", userId);
+    .eq("_id", userId)
+    .select()
+    .single();
 
   if (error) {
     throw new Error(error);

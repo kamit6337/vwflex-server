@@ -1,3 +1,4 @@
+import supabaseClient from "../../lib/supabaseClient.js";
 import {
   getTvShowPresentInUserWatchlist,
   setSingleUserWatchlistTvShowIntoRedis,
@@ -10,19 +11,24 @@ const isTvInWatchlist = async (userId, tvId, season) => {
     return true;
   }
 
-  const findTv = true;
+  const { count, error } = await supabaseClient
+    .from("watchlist_tv")
+    .select("*", { count: "exact", head: true })
+    .eq("user", userId)
+    .eq("id", tvId)
+    .eq("season", season);
 
-  // await WatchlistTv.exists({
-  //   user: userId,
-  //   tvId: Number(tvId),
-  //   season: Number(season),
-  // });
+  if (error) {
+    throw new Error(error);
+  }
 
-  if (!!findTv) {
+  const bool = count > 0;
+
+  if (bool) {
     await setSingleUserWatchlistTvShowIntoRedis(userId, tvId, season);
   }
 
-  return !!findTv;
+  return bool;
 };
 
 export default isTvInWatchlist;

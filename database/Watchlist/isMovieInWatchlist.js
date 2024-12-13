@@ -1,4 +1,4 @@
-import WatchlistMovie from "../../models/WatchlistMovieModel.js";
+import supabaseClient from "../../lib/supabaseClient.js";
 import {
   getMoviePresentInUserWatchlist,
   setSingleUserWatchlistMovieIntoRedis,
@@ -11,16 +11,23 @@ const isMovieInWatchlist = async (userId, movieId) => {
     return true;
   }
 
-  const findMovie = await WatchlistMovie.exists({
-    user: userId,
-    id: Number(movieId),
-  });
+  const { count, error } = await supabaseClient
+    .from("watchlist_movies")
+    .select("*", { count: "exact", head: true })
+    .eq("user", userId)
+    .eq("id", movieId);
 
-  if (!!findMovie) {
+  if (error) {
+    throw new Error(error);
+  }
+
+  const bool = count > 0;
+
+  if (bool) {
     await setSingleUserWatchlistMovieIntoRedis(userId, movieId);
   }
 
-  return !!findMovie;
+  return bool;
 };
 
 export default isMovieInWatchlist;
