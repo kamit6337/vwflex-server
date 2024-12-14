@@ -19,7 +19,7 @@ const getUserByEmail = async (email) => {
 
   const user = data[0];
 
-  await setUserIntoRedis(data);
+  await setUserIntoRedis(user);
 
   return user;
 };
