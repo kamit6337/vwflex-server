@@ -11,9 +11,9 @@ const isMovieInWatchlist = async (userId, movieId) => {
     return true;
   }
 
-  const { count, error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("watchlist_movies")
-    .select("*", { count: "exact", head: true })
+    .select("*")
     .eq("user", userId)
     .eq("id", movieId);
 
@@ -21,13 +21,15 @@ const isMovieInWatchlist = async (userId, movieId) => {
     throw new Error(error);
   }
 
-  const bool = count > 0;
-
-  if (bool) {
-    await setSingleUserWatchlistMovieIntoRedis(userId, movieId);
+  if (!data || data.length === 0) {
+    return false;
   }
 
-  return bool;
+  const movie = data[0];
+
+  await setSingleUserWatchlistMovieIntoRedis(userId, movie);
+
+  return true;
 };
 
 export default isMovieInWatchlist;

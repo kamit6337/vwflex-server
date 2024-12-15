@@ -34,15 +34,17 @@ const getUserWatchlistMovies = async (userId) => {
     return data;
   }
 
-  const movieIds = data.map((movie) => movie.id);
-
-  const promises = movieIds.map((movieId) => fetchMovieDetail(movieId));
-
-  const movieDetails = await Promise.all(promises);
+  const movieDetails = await Promise.all(
+    data.map(async (obj) => {
+      const { id, created_at } = obj;
+      const result = await fetchMovieDetail(id);
+      return { ...result, created_at };
+    })
+  );
 
   await setUserWatchlistMoviesIntoRedis(userId, movieDetails);
 
-  return data;
+  return movieDetails;
 };
 
 export default getUserWatchlistMovies;

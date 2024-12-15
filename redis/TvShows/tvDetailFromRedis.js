@@ -20,6 +20,8 @@ export const setTvShowDetailIntoRedis = async (data) => {
     return null;
   }
 
+  if (!data) return;
+
   await redisClient.set(
     `TV-Details:${data.id}`,
     JSON.stringify(data),

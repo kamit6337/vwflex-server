@@ -6,7 +6,7 @@ const postMovieIntoWatchlist = async (userId, movieId) => {
     throw new Error("UserId or MovieId is not provided");
   }
 
-  const { error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("watchlist_movies")
     .insert([
       {
@@ -21,7 +21,7 @@ const postMovieIntoWatchlist = async (userId, movieId) => {
     throw new Error(error);
   }
 
-  await setSingleUserWatchlistMovieIntoRedis(userId, movieId);
+  await setSingleUserWatchlistMovieIntoRedis(userId, data);
 
   return true;
 };
