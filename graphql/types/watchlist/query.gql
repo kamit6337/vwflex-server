@@ -1,6 +1,6 @@
 type Query {
   getWatchlistMovies: [MovieDetail!]
-  getWatchlistTvShows: [Season!]
+  getWatchlistTvShows: [WatchlistTv!]
   checkMovieInWatchlist(id: Int!): Response!
   checkTvShowInWatchlist(id: Int!, season: Int!): Response!
 }
@@ -8,4 +8,15 @@ type Query {
 type Response {
   id: ID!
   bool: Boolean!
+}
+
+type WatchlistTv {
+  id: ID!
+  air_date: String
+  name: String!
+  overview: String
+  popularity: Float
+  poster_path: String
+  season_number: String
+  vote_average: Float
 }
