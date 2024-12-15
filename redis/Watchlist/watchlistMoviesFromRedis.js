@@ -4,6 +4,7 @@ import redisClient from "../redisClient.js";
 export const getMoviePresentInUserWatchlist = async (userId, movieId) => {
   const check = checkRedisConnection();
   if (!check) return null;
+
   const score = await redisClient.zscore(
     `User-Watchlist-Movies:${userId}`,
     movieId

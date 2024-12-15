@@ -10,7 +10,7 @@ const checkTvShowInWatchlist = catchGraphQLError(
 
     const bool = await isTvInWatchlist(user._id, id, season);
     return {
-      id: `${id}${season}`,
+      id: `${id}-${season}`,
       bool,
     };
   }

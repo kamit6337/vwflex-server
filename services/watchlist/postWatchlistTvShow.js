@@ -8,8 +8,9 @@ const postWatchlistTvShow = catchGraphQLError(
 
     const { id, season } = args;
     const bool = await postTvShowsIntoWatchlist(user._id, id, season);
+
     return {
-      id: `${id}${season}`,
+      id: `${id}-${season}`,
       bool,
     };
   }

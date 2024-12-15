@@ -4,47 +4,45 @@ import redisClient from "../redisClient.js";
 export const getTvShowPresentInUserWatchlist = async (userId, tvId, season) => {
   const check = checkRedisConnection();
   if (!check) return null;
-  const get = await redisClient.get(`User-Watchlist-TvShows:${userId}`);
 
-  if (!get) {
-    return null;
-  }
-
-  const arr = JSON.parse(get);
-
-  if (!arr || arr.length === 0) {
-    return null;
-  }
-
-  const findTvShow = arr.find(
-    (obj) => obj.id === tvId && obj.season === season
+  const score = await redisClient.zscore(
+    `User-Watchlist-TvShows:${userId}`,
+    `${tvId}-${season}`
   );
-  return !!findTvShow;
+
+  if (score !== null) return score;
+
+  const actualScore = await redisClient.zscore(
+    `User-Actual-Watchlist-TvShows:${userId}`,
+    `${tvId}-${season}`
+  );
+
+  if (actualScore !== null) return actualScore;
+
+  return null;
 };
 
 export const getUserWatchlistTvShowsFromRedis = async (userId) => {
   const check = checkRedisConnection();
   if (!check) return null;
 
-  const get = await redisClient.get(`User-Watchlist-TvShows:${userId}`);
-
-  if (!get) {
-    return null;
-  }
-
-  const arr = JSON.parse(get);
-
-  if (!arr || arr.length === 0) {
-    return null;
-  }
-
-  const promises = arr.map((obj) =>
-    redisClient.get(`TV-Shows-Season:${obj.id}:${obj.season}`)
+  const tvIds = await redisClient.zrevrange(
+    `User-Actual-Watchlist-TvShows:${userId}`,
+    0,
+    -1
   );
 
+  if (!tvIds || tvIds.length === 0) return null;
+
+  const promises = tvIds.map((str) => {
+    const id = str.split("-")[0];
+    const season = str.split("-")[1];
+    return redisClient.get(`TV-Shows-Season:${id}:${season}`);
+  });
+
   const getTvShows = await Promise.all(promises);
-  const isMissing = getTvShows.some((data) => !data);
-  if (isMissing) {
+  const isMissingMovie = getTvShows.some((movie) => !movie);
+  if (isMissingMovie) {
     return null;
   }
 
@@ -60,31 +58,36 @@ export const setUserWatchlistTvShowsIntoRedis = async (userId, tvShows) => {
 
   const multi = redisClient.multi();
 
+  let currentDate = Date.now();
+
   for (const tvShow of tvShows) {
-    const obj = {
-      id: tvShow.id,
-      season: tvShow.season,
-    };
+    currentDate = currentDate + 1;
 
-    const getTvShows = multi.get(`User-Watchlist-TvShows:${userId}`);
+    const { id: tvId, season } = tvShow;
 
-    let updatedTvShows;
+    multi.zadd(
+      `User-Actual-Watchlist-TvShows:${userId}`,
+      currentDate,
+      `${tvId}-${season}`
+    );
 
-    if (getTvShows) {
-      updatedTvShows = [obj, ...JSON.parse(getTvShows)];
-    } else {
-      updatedTvShows = [obj];
-    }
+    multi.zadd(
+      `User-Watchlist-TvShows:${userId}`,
+      currentDate,
+      `${tvId}-${season}`
+    );
 
-    multi.set(`User-Watchlist-TvShows:${userId}`, updatedTvShows, "EX", 3600);
-
-    multi.get(
-      `TV-Shows-Season:${tvShow.id}:${tvShow.season}`,
-      JSON.stringify(tvShow)
+    multi.set(
+      `TV-Shows-Season:${tvId}:${season}`,
+      JSON.stringify(tvShow),
+      "EX",
+      3600
     );
   }
 
+  multi.expire(`User-Actual-Watchlist-TvShows:${userId}`, 3600);
   multi.expire(`User-Watchlist-TvShows:${userId}`, 3600);
+
   await multi.exec();
 };
 
@@ -99,26 +102,24 @@ export const setSingleUserWatchlistTvShowIntoRedis = async (
 
   if (!userId || !tvId || !season) return;
 
-  const getTvShows = await redisClient.get(`User-Watchlist-TvShows:${userId}`);
+  let currentDate = Date.now();
 
-  const obj = {
-    id: tvId,
-    season: season,
-  };
-
-  let updatedTvShows;
-
-  if (getTvShows) {
-    updatedTvShows = [obj, ...JSON.parse(getTvShows)];
-  } else {
-    updatedTvShows = [obj];
-  }
-
-  await redisClient.set(
+  await redisClient.zadd(
     `User-Watchlist-TvShows:${userId}`,
-    updatedTvShows,
-    "EX",
-    3600
+    currentDate,
+    `${tvId}-${season}`
+  );
+
+  const isAlreadyPresent = await redisClient.exists(
+    `User-Actual-Watchlist-TvShows:${userId}`
+  );
+
+  if (!isAlreadyPresent) return;
+
+  await redisClient.zadd(
+    `User-Actual-Watchlist-TvShows:${userId}`,
+    currentDate,
+    `${tvId}-${season}`
   );
 };
 
@@ -127,28 +128,17 @@ export const deleteSingleUserWatchlistTvShowFromRedis = async (
   tvId,
   season
 ) => {
+  const check = checkRedisConnection();
+
+  if (!check) return null;
+
   if (!userId || !tvId || !season) return;
 
-  const getTvShows = await redisClient.get(`User-Watchlist-TvShows:${userId}`);
+  const multi = redisClient.multi();
 
-  if (!getTvShows) {
-    return null;
-  }
+  multi.zrem(`User-Watchlist-TvShows:${userId}`, `${tvId}-${season}`);
 
-  const arr = JSON.parse(getTvShows);
+  multi.zrem(`User-Actual-Watchlist-TvShows:${userId}`, `${tvId}-${season}`);
 
-  if (!arr || arr.length === 0) {
-    return null;
-  }
-
-  const updatedTvShows = arr.filter(
-    (tvShow) => tvShow.id !== tvId && tvShow.season !== season
-  );
-
-  await redisClient.set(
-    `User-Watchlist-TvShows:${userId}`,
-    updatedTvShows,
-    "EX",
-    3600
-  );
+  await multi.exec();
 };

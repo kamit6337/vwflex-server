@@ -9,7 +9,7 @@ const deleteWatchlistTvShow = catchGraphQLError(
     const bool = await deleteUserWatchlistTvShow(user._id, id, season);
 
     return {
-      id: `${id}${season}`,
+      id: `${id}-${season}`,
       bool,
     };
   }
