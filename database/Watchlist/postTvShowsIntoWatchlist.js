@@ -6,7 +6,7 @@ const postTvShowsIntoWatchlist = async (userId, tvId, season) => {
     throw new Error("UserId or TvId is not provided");
   }
 
-  const { error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("watchlist_tv")
     .insert([
       {
@@ -22,13 +22,7 @@ const postTvShowsIntoWatchlist = async (userId, tvId, season) => {
     throw new Error(error);
   }
 
-  // await WatchlistTv.create({
-  //   user: userId,
-  //   id: tvId,
-  //   season,
-  // });
-
-  await setSingleUserWatchlistTvShowIntoRedis(userId, tvId, season);
+  await setSingleUserWatchlistTvShowIntoRedis(userId, data);
 
   return true;
 };

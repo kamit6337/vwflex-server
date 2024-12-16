@@ -32,9 +32,9 @@ const getUserWatchlistTvShows = async (userId) => {
 
   const tvShowsDetails = await Promise.all(
     data.map(async (obj) => {
-      const { id, season } = obj;
+      const { id, season, created_at } = obj;
       const get = await fetchTvShowAdditional(id, { season });
-      return { ...get, id: id, season: season };
+      return { ...get, id: id, season: season, created_at };
     })
   );
 

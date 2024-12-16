@@ -11,9 +11,9 @@ const isTvInWatchlist = async (userId, tvId, season) => {
     return true;
   }
 
-  const { count, error } = await supabaseClient
+  const { data, error } = await supabaseClient
     .from("watchlist_tv")
-    .select("*", { count: "exact", head: true })
+    .select("*")
     .eq("user", userId)
     .eq("id", tvId)
     .eq("season", season);
@@ -22,13 +22,15 @@ const isTvInWatchlist = async (userId, tvId, season) => {
     throw new Error(error);
   }
 
-  const bool = count > 0;
-
-  if (bool) {
-    await setSingleUserWatchlistTvShowIntoRedis(userId, tvId, season);
+  if (!data || data.length === 0) {
+    return false;
   }
 
-  return bool;
+  const tvShow = data[0];
+
+  await setSingleUserWatchlistTvShowIntoRedis(userId, tvShow);
+
+  return true;
 };
 
 export default isTvInWatchlist;

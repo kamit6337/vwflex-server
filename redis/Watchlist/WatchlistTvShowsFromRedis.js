@@ -58,22 +58,21 @@ export const setUserWatchlistTvShowsIntoRedis = async (userId, tvShows) => {
 
   const multi = redisClient.multi();
 
-  let currentDate = Date.now();
-
   for (const tvShow of tvShows) {
-    currentDate = currentDate + 1;
+    const { id: tvId, season, created_at } = tvShow;
 
-    const { id: tvId, season } = tvShow;
+    const newDate = new Date(created_at);
+    const createdAt = newDate.getTime();
 
     multi.zadd(
       `User-Actual-Watchlist-TvShows:${userId}`,
-      currentDate,
+      createdAt,
       `${tvId}-${season}`
     );
 
     multi.zadd(
       `User-Watchlist-TvShows:${userId}`,
-      currentDate,
+      createdAt,
       `${tvId}-${season}`
     );
 
@@ -91,22 +90,21 @@ export const setUserWatchlistTvShowsIntoRedis = async (userId, tvShows) => {
   await multi.exec();
 };
 
-export const setSingleUserWatchlistTvShowIntoRedis = async (
-  userId,
-  tvId,
-  season
-) => {
+export const setSingleUserWatchlistTvShowIntoRedis = async (userId, tvShow) => {
   const check = checkRedisConnection();
 
   if (!check) return null;
 
-  if (!userId || !tvId || !season) return;
+  if (!userId || !tvShow) return;
 
-  let currentDate = Date.now();
+  const { id: tvId, season, created_at } = tvShow;
+
+  const newDate = new Date(created_at);
+  const createdAt = newDate.getTime();
 
   await redisClient.zadd(
     `User-Watchlist-TvShows:${userId}`,
-    currentDate,
+    createdAt,
     `${tvId}-${season}`
   );
 
@@ -118,7 +116,7 @@ export const setSingleUserWatchlistTvShowIntoRedis = async (
 
   await redisClient.zadd(
     `User-Actual-Watchlist-TvShows:${userId}`,
-    currentDate,
+    createdAt,
     `${tvId}-${season}`
   );
 };
