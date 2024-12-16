@@ -1,6 +1,6 @@
 enum Time_Period {
-  Week
-  Day
+  WEEK
+  DAY
 }
 
 type Query {
@@ -8,11 +8,11 @@ type Query {
   getOnTheAirTvShows(page: Int!): [TV]
   getPopularTvShows(page: Int!): [TV]
   getTopRatedTvShows(page: Int!): [TV]
+  getTvShowDetails(id: ID!): TV_Show_Detail
+  getTvShowSeason(id: ID!, season: ID!): Season
+  getTvShowRecommendation(id: ID!, page: Int!): [TV]
+  getTvShowSimilar(id: ID!, page: Int!): [TV]
+  getTvShowImage(id: ID!): [Image]
+  getTvShowReviews(id: ID!): [Review]
   getTrendingTvShows(time: Time_Period!): [TV]
-  getTvShowDetails(id: Int!): TV_Show_Detail
-  getTvShowSeason(id: Int!, season: Int!): Season
-  getTvShowRecommendation(id: Int!, page: Int!): [TV]
-  getTvShowSimilar(id: Int!, page: Int!): [TV]
-  getTvShowImage(id: Int!): [Image]
-  getTvShowReviews(id: Int!): [Review]
 }

@@ -4,7 +4,7 @@ type TV_Show_Detail {
   created_by: [Created_By]
   first_air_date: String
   genres: [Genre]
-  id: Int
+  id: ID
   last_air_date: String
   name: String!
   number_of_episodes: Int!

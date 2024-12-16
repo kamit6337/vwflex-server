@@ -1,6 +1,6 @@
 type Mutation {
-  deleteWatchlistMovie(id: Int!): Response!
-  deleteWatchlistTvShow(id: Int!, season: Int!): Response!
-  postWatchlistMovie(id: Int!): Response!
-  postWatchlistTvShow(id: Int!, season: Int!): Response!
+  deleteWatchlistMovie(id: ID!): Response!
+  deleteWatchlistTvShow(id: ID!, season: ID!): Response!
+  postWatchlistMovie(id: ID!): Response!
+  postWatchlistTvShow(id: ID!, season: ID!): Response!
 }

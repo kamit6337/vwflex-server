@@ -4,7 +4,7 @@ type MovieDetail {
   budget: Int
   genres: [Genre]
   homepage: String
-  id: Int
+  id: ID
   original_language: String
   original_title: String
   origin_country: [String]

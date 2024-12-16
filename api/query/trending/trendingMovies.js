@@ -4,8 +4,8 @@ import {
 } from "../../../redis/Trending/trendingMoviesFromRedis.js";
 import { getReq } from "../../../utils/api/api.js";
 
-const DAY = "day";
-const WEEK = "week";
+const DAY = "DAY";
+const WEEK = "WEEK";
 
 const trendingMovies = async (time = DAY) => {
   const get = await getTrendingMoviesFromRedis(time);
@@ -14,14 +14,14 @@ const trendingMovies = async (time = DAY) => {
   }
 
   if (time === WEEK) {
-    const trendingMovies = await getReq(`/trending/movie/${WEEK}`);
+    const trendingMovies = await getReq(`/trending/movie/week`);
     const response = trendingMovies?.results;
 
     await setTrendingMoviesIntoRedis(time, response);
     return response;
   }
 
-  const trendingMovies = await getReq(`/trending/movie/${DAY}`);
+  const trendingMovies = await getReq(`/trending/movie/day`);
   const response = trendingMovies?.results;
 
   await setTrendingMoviesIntoRedis(time, response);

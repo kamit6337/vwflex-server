@@ -3,7 +3,7 @@ type Review {
   author_details: AuthorDetails
   content: String
   created_at: String
-  id: String
+  id: ID
   updated_at: String
   url: String
 }

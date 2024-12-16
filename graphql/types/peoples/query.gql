@@ -1,6 +1,6 @@
 enum TimePeriod {
-  Week
-  Day
+  WEEK
+  DAY
 }
 
 type Query {

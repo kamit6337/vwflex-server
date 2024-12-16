@@ -3,7 +3,7 @@ union KnownFor = Movie | TV
 type People {
   adult: Boolean!
   gender: Int
-  id: Int!
+  id: ID!
   known_for_department: String!
   name: String!
   original_name: String!

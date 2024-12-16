@@ -1,8 +1,8 @@
 type Query {
   getWatchlistMovies: [MovieDetail!]
   getWatchlistTvShows: [WatchlistTv!]
-  checkMovieInWatchlist(id: Int!): Response!
-  checkTvShowInWatchlist(id: Int!, season: Int!): Response!
+  checkMovieInWatchlist(id: ID!): Response!
+  checkTvShowInWatchlist(id: ID!, season: ID!): Response!
 }
 
 type Response {

@@ -1,6 +1,6 @@
 enum TimePeriod {
-  Week
-  Day
+  WEEK
+  DAY
 }
 
 type Query {
@@ -9,9 +9,9 @@ type Query {
   getTopRatedMovies(page: Int!): [Movie]
   getUpcomingMovies(page: Int!): [Movie]
   getMovie(id: ID!): MovieDetail
-  getMovieRecommendations(page: Int!, id: Int!): [Movie]
-  getSimilarMovies(page: Int!, id: Int!): [Movie]
-  getMovieImages(id: Int!): [Image]
-  getMovieReviews(id: Int!): [Review]
+  getMovieRecommendations(page: Int!, id: ID!): [Movie]
+  getSimilarMovies(page: Int!, id: ID!): [Movie]
+  getMovieImages(id: ID!): [Image]
+  getMovieReviews(id: ID!): [Review]
   getTrendingMovies(time: TimePeriod!): [Movie]
 }

@@ -4,8 +4,8 @@ import {
 } from "../../../redis/Trending/trendingTvShowsFromRedis.js";
 import { getReq } from "../../../utils/api/api.js";
 
-const DAY = "day";
-const WEEK = "week";
+const DAY = "DAY";
+const WEEK = "WEEK";
 
 const trendingTvShows = async (time = DAY) => {
   const get = await getTrendingTvShowsFromRedis(time);
@@ -14,7 +14,7 @@ const trendingTvShows = async (time = DAY) => {
   }
 
   if (time === WEEK) {
-    const trendingtv = await getReq(`/trending/tv/${WEEK}`);
+    const trendingtv = await getReq(`/trending/tv/week`);
     const response = trendingtv?.results;
 
     await setTrendingTvShowsIntoRedis(time, response);
@@ -22,7 +22,7 @@ const trendingTvShows = async (time = DAY) => {
     return response;
   }
 
-  const trendingtv = await getReq(`/trending/tv/${DAY}`);
+  const trendingtv = await getReq(`/trending/tv/day`);
   const response = trendingtv?.results;
 
   await setTrendingTvShowsIntoRedis(time, response);
