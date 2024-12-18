@@ -1,4 +1,0 @@
-type Credit {
-  movies: [Movie]
-  tv: [TV]
-}

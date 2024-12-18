@@ -35,6 +35,8 @@ export const getUserWatchlistMoviesFromRedis = async (userId, page, limit) => {
     to
   );
 
+  console.log("movieIds", movieIds);
+
   if (!movieIds || movieIds.length === 0) return null;
 
   const promises = movieIds.map((id) => redisClient.get(`Movie:${id}`));

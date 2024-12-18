@@ -35,6 +35,8 @@ export const getUserWatchlistTvShowsFromRedis = async (userId, page, limit) => {
     to
   );
 
+  console.log("tvIds", tvIds);
+
   if (!tvIds || tvIds.length === 0) return null;
 
   const promises = tvIds.map((str) => {

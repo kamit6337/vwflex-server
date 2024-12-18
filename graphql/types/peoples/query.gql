@@ -7,6 +7,7 @@ type Query {
   getPopularPeoples(page: Int!): [People]
   getPersonDetail(id: ID!): Person
   getPersonImages(id: ID!): [Image]
-  getPersonCredits(id: ID!): Credit
+  getPersonMovieCredits(id: ID!): [Movie]
+  getPersonTvCredits(id: ID!): [TV]
   getTrendingPeoples(time: TimePeriod!): [People]
 }

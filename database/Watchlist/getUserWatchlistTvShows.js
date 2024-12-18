@@ -35,6 +35,11 @@ const getUserWatchlistTvShows = async (userId, page = 1) => {
     return data;
   }
 
+  console.log(
+    "tv show data from supabase",
+    data.map((obj) => obj.id)
+  );
+
   const tvShowsDetails = await Promise.all(
     data.map(async (obj) => {
       const { id, season, created_at } = obj;

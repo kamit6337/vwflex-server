@@ -1,13 +1,14 @@
 import fetchPersonAdditional from "../../api/query/peoples/fetchPersonAdditional.js";
 import catchGraphQLError from "../../lib/catchGraphQLError.js";
 
-const getPersonCredits = catchGraphQLError(
+const getPersonMovieCredits = catchGraphQLError(
   async (parent, args, contextValue) => {
     const { id } = args;
 
-    const get = await fetchPersonAdditional(id, { credits: true });
+    const get = await fetchPersonAdditional(id, { movies: true });
 
     return get;
   }
 );
-export default getPersonCredits;
+
+export default getPersonMovieCredits;

@@ -38,6 +38,10 @@ const getUserWatchlistMovies = async (userId, page = 1) => {
   if (data?.length === 0) {
     return data;
   }
+  console.log(
+    "data from supabase",
+    data.map((obj) => obj.id)
+  );
 
   const movieDetails = await Promise.all(
     data.map(async (obj) => {

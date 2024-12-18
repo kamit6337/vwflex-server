@@ -34,14 +34,21 @@ export const setPopularPeoplesIntoRedis = async (peoples) => {
 
   const multi = redisClient.multi();
 
-  const baseTime = Date.now();
+  let baseTime = Date.now();
 
-  peoples.forEach((people, index) => {
-    const updatedTime = baseTime + index;
+  for (const people of peoples) {
+    baseTime = baseTime + 1;
 
-    multi.zadd("Popular-Peoples", updatedTime, people.id);
+    multi.zadd("Popular-Peoples", baseTime, people.id);
     multi.set(`People:${people.id}`, JSON.stringify(people), "EX", 3600);
-  });
+  }
+
+  // peoples.forEach((people, index) => {
+  //   const updatedTime = baseTime + index;
+
+  //   multi.zadd("Popular-Peoples", updatedTime, people.id);
+  //   multi.set(`People:${people.id}`, JSON.stringify(people), "EX", 3600);
+  // });
 
   multi.expire("Popular-Peoples", 3600);
 

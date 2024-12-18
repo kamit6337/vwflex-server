@@ -10,7 +10,7 @@ import { getReq } from "../../../utils/api/api.js";
 
 const fetchPersonAdditional = async (
   id,
-  { images = false, credits = false }
+  { images = false, movies = false, tv = false }
 ) => {
   if (images) {
     const get = await personImagesFromRedis(id);
@@ -30,29 +30,30 @@ const fetchPersonAdditional = async (
     return modifyPersonImages;
   }
 
-  if (credits) {
-    let response = {};
-
+  if (movies) {
     const getMovies = await getPersonMoviesFromRedis(id);
+
+    if (getMovies) {
+      return getMovies;
+    }
+
+    const personMovieCredits = await getReq(`/person/${id}/movie_credits`);
+    const response = personMovieCredits?.cast;
+    await setPersonMovieToRedis(id, response);
+
+    return response;
+  }
+
+  if (tv) {
     const getTvShows = await getPersonTvShowsFromRedis(id);
 
     if (getTvShows) {
-      response.tv = getTvShows;
-    } else {
-      const personTvCredits = await getReq(`/person/${id}/tv_credits`);
-      const res = personTvCredits?.cast;
-      await setPersonTvShowsToRedis(id, res);
-      response.tv = res;
+      return getTvShows;
     }
 
-    if (getMovies) {
-      response.movies = getMovies;
-    } else {
-      const personMovieCredits = await getReq(`/person/${id}/movie_credits`);
-      const res = personMovieCredits?.cast;
-      await setPersonMovieToRedis(id, res);
-      response.movies = res;
-    }
+    const personTvCredits = await getReq(`/person/${id}/tv_credits`);
+    const response = personTvCredits?.cast;
+    await setPersonTvShowsToRedis(id, response);
 
     return response;
   }
