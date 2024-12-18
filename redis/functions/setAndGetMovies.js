@@ -31,14 +31,14 @@ export const setMovieToRedis = async (uniqueName, movies) => {
 
   const multi = redisClient.multi();
 
-  const baseTime = Date.now();
+  let baseTime = Date.now();
 
-  movies.forEach((movie, index) => {
-    const uniqueTime = baseTime + index; // Ensures unique timestamp
+  for (const movie of movies) {
+    baseTime = baseTime + 1; // Ensures unique timestamp
 
-    multi.zadd(uniqueName, uniqueTime, movie.id);
+    multi.zadd(uniqueName, baseTime, movie.id);
     multi.set(`Movie:${movie.id}`, JSON.stringify(movie), "EX", 3600);
-  });
+  }
 
   multi.expire(uniqueName, 3600);
 

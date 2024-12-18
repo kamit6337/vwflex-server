@@ -9,5 +9,5 @@ export const getFixedFromRedis = async () => {
 export const setFixedToRedis = async (data) => {
   if (!data) return;
 
-  await redisClient.set("Fixed", JSON.stringify(data));
+  await redisClient.set("Fixed", JSON.stringify(data), "EX", 3600);
 };

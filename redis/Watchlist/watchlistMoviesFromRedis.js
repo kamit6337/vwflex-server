@@ -22,14 +22,17 @@ export const getMoviePresentInUserWatchlist = async (userId, movieId) => {
   return null;
 };
 
-export const getUserWatchlistMoviesFromRedis = async (userId) => {
+export const getUserWatchlistMoviesFromRedis = async (userId, page, limit) => {
   const check = checkRedisConnection();
   if (!check) return null;
 
+  const skip = (page - 1) * limit; // Calculate starting index
+  const to = skip + limit - 1; // Calculate ending index
+
   const movieIds = await redisClient.zrevrange(
     `User-Actual-Watchlist-Movies:${userId}`,
-    0,
-    -1
+    skip,
+    to
   );
 
   if (!movieIds || movieIds.length === 0) return null;

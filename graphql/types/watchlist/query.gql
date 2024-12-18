@@ -1,6 +1,6 @@
 type Query {
-  getWatchlistMovies: [MovieDetail!]
-  getWatchlistTvShows: [WatchlistTv!]
+  getWatchlistMovies(page: Int): [MovieDetail!]
+  getWatchlistTvShows(page: Int): [WatchlistTv!]
   checkMovieInWatchlist(id: ID!): Response!
   checkTvShowInWatchlist(id: ID!, season: ID!): Response!
 }

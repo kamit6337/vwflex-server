@@ -6,7 +6,9 @@ const getWatchlistMovies = catchGraphQLError(
   async (parent, args, contextValue) => {
     const user = await Req(contextValue.req);
 
-    const get = await getUserWatchlistMovies(user._id);
+    const { page } = args;
+
+    const get = await getUserWatchlistMovies(user._id, page);
     return get;
   }
 );

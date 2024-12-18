@@ -6,7 +6,9 @@ const getWatchlistTvShows = catchGraphQLError(
   async (parent, args, contextValue) => {
     const user = await Req(contextValue.req);
 
-    const get = await getUserWatchlistTvShows(user._id);
+    const { page } = args;
+
+    const get = await getUserWatchlistTvShows(user._id, page);
 
     if (!get || get.length === 0) return get;
 
