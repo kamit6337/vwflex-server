@@ -41,6 +41,9 @@ const init = async () => {
     const server = new ApolloServer({
       typeDefs,
       resolvers,
+      formatError: (formattedError, error) => {
+        return { message: formattedError.message || error?.message };
+      },
     });
 
     await server.start();
